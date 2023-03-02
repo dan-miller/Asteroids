@@ -7,11 +7,14 @@ NOTE: You don't need to understand the details here, no fiddling neccessary.
 import java.awt.*;
 import java.awt.event.*;
 
-public abstract class Game extends Canvas {
+import javax.swing.Timer;
+
+public abstract class Game extends Canvas implements ActionListener {
   protected boolean on = true;
   protected int width, height;
   protected Image buffer;
-  
+  Timer timer = new Timer(100, this);
+
 	public Game(String name, int inWidth, int inHeight) {
 	  width = inWidth;
 	  height = inHeight;
@@ -27,7 +30,14 @@ public abstract class Game extends Canvas {
     });
     
     buffer = createImage(width, height);
+    timer.start();
 	}
+
+  public void actionPerformed(ActionEvent ev) {
+    if (ev.getSource() == timer && on) {
+      repaint();
+    }
+  }
   
   // 'paint' will be called every tenth of a second that the game is on.
 	abstract public void paint(Graphics brush);
@@ -38,11 +48,6 @@ public abstract class Game extends Canvas {
   public void update(Graphics brush) {
     paint(buffer.getGraphics());
 		brush.drawImage(buffer,0,0,this);
-    if (on) {sleep(10); repaint();}
-  }
-  
-  // 'sleep' is a simple helper function used in 'update'.
-  private void sleep(int time) {
-    try {Thread.sleep(time);} catch(Exception exc){};
+    if (on) repaint();
   }
 }

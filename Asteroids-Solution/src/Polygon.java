@@ -17,6 +17,16 @@ public class Polygon implements Cloneable {
   public Point position;   // The offset mentioned above.
   public double rotation; // Zero degrees is due east.
   
+  public boolean collidesWith(Polygon other) {
+    Point[] otherPoints = other.getPoints();
+    for (Point p : otherPoints) {
+      if (this.contains(p)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public Polygon(Point[] inShape, Point inPosition, double inRotation) {
     shape = inShape;
     position = inPosition;
@@ -36,6 +46,8 @@ public class Polygon implements Cloneable {
     }
   }
   
+  
+
   // "getPoints" applies the rotation and offset to the shape of the polygon.
   public Point[] getPoints() {
     Point center = findCenter();
@@ -53,6 +65,8 @@ public class Polygon implements Cloneable {
     }
     return points;
   }
+
+  
   
   // "contains" implements some magical math (i.e. the ray-casting algorithm).
   public boolean contains(Point point) {
