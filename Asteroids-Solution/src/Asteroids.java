@@ -36,64 +36,73 @@ public class Asteroids extends Game {
         };
 
         Asteroid[] array = {
-                new Asteroid(asteroidPoints, new Point(50, 50), 0),
-                new Asteroid(asteroidPoints, new Point(50, 250), 0),
-                new Asteroid(asteroidPoints, new Point(100, 80), 0),
-                new Asteroid(asteroidPoints, new Point(400, 250), 0),
-                new Asteroid(asteroidPoints, new Point(30, 550), 0),
-                new Asteroid(asteroidPoints, new Point(200, 180), 0)
+            new Asteroid(asteroidPoints, new Point(50, 50), 0),
+            new Asteroid(asteroidPoints, new Point(50, 250), 0),
+            new Asteroid(asteroidPoints, new Point(100, 80), 0),
+            new Asteroid(asteroidPoints, new Point(400, 250), 0),
+            new Asteroid(asteroidPoints, new Point(30, 550), 0),
+            new Asteroid(asteroidPoints, new Point(200, 180), 0)
         };
         asteroids = new ArrayList<Asteroid>(Arrays.asList(array));
 
         this.addKeyListener(new Keyboard());
     }
 
-  public void paint(Graphics brush) {
-    brush.setColor(Color.black);
-    brush.fillRect(0, 0, width, height);
-    brush.setColor(Color.white);
+    public void paint(Graphics brush) {
+        brush.setColor(Color.black);
+        brush.fillRect(0, 0, width, height);
+        brush.setColor(Color.white);
 
-    // GET MOUSE POSITION
-    java.awt.Point mousePos = this.getMousePosition();
-    int xPos = mousePos != null ? mousePos.x : -1;
-    int yPos = mousePos != null ? mousePos.y : -1;
-    brush.drawString("X: " + xPos + " Y: " + yPos, 700, 550);
-    ////////////////////
+        // GET MOUSE POSITION
+        java.awt.Point mousePos = this.getMousePosition();
+        int xPos = mousePos != null ? mousePos.x : -1;
+        int yPos = mousePos != null ? mousePos.y : -1;
+        brush.drawString("X: " + xPos + " Y: " + yPos, 700, 550);
+        ////////////////////
 
-    ship.move();
-    ship.paint(brush);
+        ship.move();
+        ship.paint(brush);
 
-    asteroids.forEach((a) -> a.paint(brush));
+        asteroids.forEach((a) -> {a.move();a.paint(brush);});
 
-    for (Asteroid a : asteroids) {
-      if (a.collidesWith(ship)) {
-        this.on = false;
-        var defaultFont = brush.getFont();
-        brush.setFont(new Font("Arial", Font.BOLD, 128));
-        brush.drawString("YOU DIED", 100, 200);
-        brush.setFont(defaultFont);
-      }
-      if (bullet1 != null && a.contains(bullet1.getPosition())) {
-        bullet1 = null;
-      }
-      if (bullet2 != null && a.contains(bullet2.getPosition())) {
-        bullet2 = null;
-      }
+        for (int i = 0; i < asteroids.size(); i++) {
+            Asteroid a = asteroids.get(i);
+            if (a.collidesWith(ship)) {
+                this.on = false;
+                var defaultFont = brush.getFont();
+                brush.setFont(new Font("Arial", Font.BOLD, 128));
+                brush.drawString("YOU DIED", 100, 200);
+                brush.setFont(defaultFont);
+            }
+            boolean asteroidHit = false;
+            if (bullet1 != null && a.contains(bullet1.getPosition())) {
+                bullet1 = null;
+                asteroidHit = true;
+            }
+            if (bullet2 != null && a.contains(bullet2.getPosition())) {
+                bullet2 = null;
+                asteroidHit = true;
+            }
+            if (asteroidHit) {
+                asteroids.remove(i);
+                i--;
+                a = null;
+            }
+        }
+
+        if (bullet1 != null) {
+            bullet1.paint(brush);
+            if (!bullet1.move()) {
+                bullet1 = null;
+            }
+        }
+        if (bullet2 != null) {
+            bullet2.paint(brush);
+            if (!bullet2.move()) {
+                bullet2 = null;
+            }
+        }
     }
-
-    if (bullet1 != null) {
-      bullet1.paint(brush);
-      if (!bullet1.move()) {
-        bullet1 = null;
-      }
-    }
-    if (bullet2 != null) {
-      bullet2.paint(brush);
-      if (!bullet2.move()) {
-        bullet2 = null;
-      }
-    }
-  }
 
     public void shoot() {
         if (bullet1 == null) {
@@ -108,8 +117,7 @@ public class Asteroids extends Game {
     }
 
     class Keyboard implements KeyListener {
-        public Keyboard() {
-        }
+        public Keyboard() {}
 
         @Override
         public void keyPressed(KeyEvent e) {
