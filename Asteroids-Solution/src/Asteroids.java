@@ -17,6 +17,7 @@ public class Asteroids extends Game {
     private Bullet bullet1;
     private Bullet bullet2;
     private ArrayList<Asteroid> asteroids;
+    private ArrayList<Star> stars;
 
     public Asteroids() {
         super("Asteroids!", 800, 600);
@@ -45,6 +46,10 @@ public class Asteroids extends Game {
         };
         asteroids = new ArrayList<Asteroid>(Arrays.asList(array));
 
+        stars = new ArrayList<Star>();
+        for (int i = 0; i < 100; i++) {
+            stars.add(new Star(new Point(Math.random()*800, Math.random()*600), Math.random()*360));
+        }
         this.addKeyListener(new Keyboard());
     }
 
@@ -53,6 +58,9 @@ public class Asteroids extends Game {
         brush.fillRect(0, 0, width, height);
         brush.setColor(Color.white);
 
+        if (this.stars != null) {
+            stars.forEach((s) -> {s.move();s.paint(brush);});
+        }
         // GET MOUSE POSITION
         java.awt.Point mousePos = this.getMousePosition();
         int xPos = mousePos != null ? mousePos.x : -1;
@@ -89,7 +97,6 @@ public class Asteroids extends Game {
                 a = null;
             }
         }
-
         if (bullet1 != null) {
             bullet1.paint(brush);
             if (!bullet1.move()) {
