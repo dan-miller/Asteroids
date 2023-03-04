@@ -6,7 +6,7 @@ public class Asteroid extends Polygon {
         super(inShape, inPosition, inRotation);
         this.xVelocity = Math.random() / 10;
         this.yVelocity = Math.random() / 10;
-        this.rotation = Math.random() * 360;
+        //this.rotation = Math.random() * 360;
     }
 
     public void paint(Graphics brush) {

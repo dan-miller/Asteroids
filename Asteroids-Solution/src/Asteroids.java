@@ -12,7 +12,6 @@ import java.util.Arrays;
 
 public class Asteroids extends Game {
     // Game Objects
-
     private Ship ship;
     private Bullet bullet1;
     private Bullet bullet2;
@@ -37,20 +36,24 @@ public class Asteroids extends Game {
         };
 
         Asteroid[] array = {
-            new Asteroid(asteroidPoints, new Point(50, 50), 0),
-            new Asteroid(asteroidPoints, new Point(50, 250), 0),
-            new Asteroid(asteroidPoints, new Point(100, 80), 0),
-            new Asteroid(asteroidPoints, new Point(400, 250), 0),
-            new Asteroid(asteroidPoints, new Point(30, 550), 0),
-            new Asteroid(asteroidPoints, new Point(200, 180), 0)
+                new Asteroid(asteroidPoints, new Point(50, 50), 0),
+                new Asteroid(asteroidPoints, new Point(50, 250), 0),
+                new Asteroid(asteroidPoints, new Point(100, 80), 0),
+                new Asteroid(asteroidPoints, new Point(400, 250), 0),
+                new Asteroid(asteroidPoints, new Point(30, 550), 0),
+                new Asteroid(asteroidPoints, new Point(200, 180), 0)
         };
         asteroids = new ArrayList<Asteroid>(Arrays.asList(array));
 
         stars = new ArrayList<Star>();
         for (int i = 0; i < 100; i++) {
-            stars.add(new Star(new Point(Math.random()*800, Math.random()*600), Math.random()*360));
+            stars.add(new Star(new Point(Math.random() * 800, Math.random() * 600), Math.random() * 360));
         }
         this.addKeyListener(new Keyboard());
+    }
+
+    public void newGame() {
+        
     }
 
     public void paint(Graphics brush) {
@@ -58,28 +61,43 @@ public class Asteroids extends Game {
         brush.fillRect(0, 0, width, height);
         brush.setColor(Color.white);
 
-        if (this.stars != null) {
-            stars.forEach((s) -> {s.move();s.paint(brush);});
-        }
         // GET MOUSE POSITION
         java.awt.Point mousePos = this.getMousePosition();
         int xPos = mousePos != null ? mousePos.x : -1;
         int yPos = mousePos != null ? mousePos.y : -1;
         brush.drawString("X: " + xPos + " Y: " + yPos, 700, 550);
         ////////////////////
+        if (this.stars != null) {
+            stars.forEach((s) -> {
+                if (this.play) {
+                    s.move();
+                }
+                s.paint(brush);
+            });
+        }
 
-        ship.move();
+        if (this.play) {
+            ship.move();
+        }
         ship.paint(brush);
 
-        asteroids.forEach((a) -> {a.move();a.paint(brush);});
+        asteroids.forEach((a) -> {
+            if (this.play) {
+                a.move();
+                
+            }
+            a.paint(brush);
+        });
 
         for (int i = 0; i < asteroids.size(); i++) {
             Asteroid a = asteroids.get(i);
             if (a.collidesWith(ship)) {
-                this.on = false;
+                this.play = false;
                 var defaultFont = brush.getFont();
                 brush.setFont(new Font("Arial", Font.BOLD, 128));
                 brush.drawString("YOU DIED", 100, 200);
+                brush.setFont(new Font("Arial", Font.BOLD, 72));
+                brush.drawString("Press R to restart", 100,300);
                 brush.setFont(defaultFont);
             }
             boolean asteroidHit = false;
@@ -109,6 +127,7 @@ public class Asteroids extends Game {
                 bullet2 = null;
             }
         }
+        repaint();
     }
 
     public void shoot() {
@@ -124,7 +143,8 @@ public class Asteroids extends Game {
     }
 
     class Keyboard implements KeyListener {
-        public Keyboard() {}
+        public Keyboard() {
+        }
 
         @Override
         public void keyPressed(KeyEvent e) {
@@ -140,6 +160,9 @@ public class Asteroids extends Game {
 
             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                 shoot();
+            }
+            if (e.getKeyCode() == KeyEvent.VK_R) {
+                newGame();
             }
         }
 

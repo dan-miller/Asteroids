@@ -21,7 +21,7 @@ public class Ship extends Polygon implements ActionListener {
             xPositions[i] = (int)shipPoints[i].x;
             yPositions[i] = (int)shipPoints[i].y;
         }
-        brush.setColor(Color.WHITE);
+        brush.setColor(Color.GREEN);
         brush.drawPolygon(xPositions, yPositions, numPoints);
 
         
