@@ -6,6 +6,11 @@ DESCRIPTION: Ah, if only real-life classes were this straight-forward. We'll
 */
 
 public class Point {
-  double x,y;
-  public Point(double inX, double inY) { x = inX; y = inY; }
+    public double x;
+    public double y;
+
+    public Point(double _x, double _y) {
+        x = _x;
+        y = _y;
+    }
 }
