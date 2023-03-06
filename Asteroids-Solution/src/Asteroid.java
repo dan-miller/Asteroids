@@ -9,6 +9,10 @@ public class Asteroid extends Polygon {
         //this.rotation = Math.random() * 360;
     }
 
+    public void move() {
+        super.move(xVelocity, yVelocity);
+    }
+
     public void paint(Graphics brush) {
         Point[] astPoints = this.getPoints();
         int numPoints = astPoints.length;
@@ -20,23 +24,6 @@ public class Asteroid extends Polygon {
         }
         brush.setColor(Color.WHITE);
         brush.drawPolygon(xPositions, yPositions, numPoints);
-    }
-
-    public void move() {
-        this.position.x += (this.xVelocity * Math.cos(Math.toRadians(this.rotation)));
-        this.position.y += (this.yVelocity * Math.sin(Math.toRadians(this.rotation)));
-        if (this.position.x > 800) {
-            this.position.x = 0;
-        }
-        if (this.position.x < 0) {
-            this.position.x = 800;
-        }
-        if (this.position.y > 600) {
-            this.position.y = 0;
-        }
-        if (this.position.y < 0) {
-            this.position.y = 600;
-        }
     }
     
 }

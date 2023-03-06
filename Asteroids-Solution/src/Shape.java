@@ -13,10 +13,17 @@ public abstract class Shape {
     public double getHeading() {
         return heading;
     }
+    public void setHeading(double newHeading) {
+        this.heading = newHeading;
+    }
 
-    public void move(double velocityFactor) {
-        this.position.x += (velocityFactor * Math.cos(Math.toRadians(this.heading)));
-        this.position.y += (velocityFactor * Math.sin(Math.toRadians(this.heading)));
+    public void move(double velocity) {
+        move(velocity, velocity);
+    }
+
+    public void move(double xVelocity, double yVelocity) {
+        this.position.x += (xVelocity * Math.cos(Math.toRadians(this.heading)));
+        this.position.y += (yVelocity * Math.sin(Math.toRadians(this.heading)));
         if (this.position.x > 800) {
             this.position.x = 0;
         }

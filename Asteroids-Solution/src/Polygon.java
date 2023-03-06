@@ -12,10 +12,9 @@ USAGE: You are intended to instantiate this class with a set of points that
 NOTE: You don't need to worry about the "magic math" details.
 */
 
-public class Polygon implements Cloneable {
-  private Point[] shape;   // An array of points.
-  public Point position;   // The offset mentioned above.
-  public double rotation; // Zero degrees is due east.
+public class Polygon extends Shape implements Cloneable {
+  private Point[] vertices;   // An array of points that comprise the vertices of the polygon.
+   // Zero degrees is due east.
   
   public boolean collidesWith(Polygon other) {
     Point[] otherPoints = other.getPoints();
@@ -27,20 +26,19 @@ public class Polygon implements Cloneable {
     return false;
   }
 
-  public Polygon(Point[] inShape, Point inPosition, double inRotation) {
-    shape = inShape;
-    position = inPosition;
-    rotation = inRotation;
+  public Polygon(Point[] inShape, Point _position, double _rotation) {
+    super(_position, _rotation);
+    vertices = inShape;
     
     // First, we find the shape's top-most left-most boundary, its origin.
-    Point origin = new Point(shape[0].x, shape[0].y);
-    for (Point p : shape) {
+    Point origin = new Point(vertices[0].x, vertices[0].y);
+    for (Point p : vertices) {
       if (p.x < origin.x) origin.x = p.x;
       if (p.y < origin.y) origin.y = p.y;
     }
     
     // Then, we orient all of its points relative to the real origin.
-    for (Point p : shape) {
+    for (Point p : vertices) {
       p.x -= origin.x;
       p.y -= origin.y;
     }
@@ -51,15 +49,15 @@ public class Polygon implements Cloneable {
   // "getPoints" applies the rotation and offset to the shape of the polygon.
   public Point[] getPoints() {
     Point center = findCenter();
-    Point[] points = new Point[shape.length];
+    Point[] points = new Point[vertices.length];
     int i = 0;
-    for (Point p : shape) {
-      double x = ((p.x-center.x) * Math.cos(Math.toRadians(rotation)))
-               - ((p.y-center.y) * Math.sin(Math.toRadians(rotation)))
-               + center.x/2 + position.x;
-      double y = ((p.x-center.x) * Math.sin(Math.toRadians(rotation)))
-               + ((p.y-center.y) * Math.cos(Math.toRadians(rotation)))
-               + center.y/2 + position.y;
+    for (Point p : vertices) {
+      double x = ((p.x-center.x) * Math.cos(Math.toRadians(this.getHeading())))
+               - ((p.y-center.y) * Math.sin(Math.toRadians(this.getHeading())))
+               + center.x/2 + this.getPosition().x;
+      double y = ((p.x-center.x) * Math.sin(Math.toRadians(this.getHeading())))
+               + ((p.y-center.y) * Math.cos(Math.toRadians(this.getHeading())))
+               + center.y/2 + this.getPosition().y;
       points[i] = new Point(x,y);
       i++;
     }
@@ -72,7 +70,7 @@ public class Polygon implements Cloneable {
   public boolean contains(Point point) {
     Point[] points = getPoints();
     double crossingNumber = 0;
-    for (int i = 0, j = 1; i < shape.length; i++, j=(j+1)%shape.length) {
+    for (int i = 0, j = 1; i < vertices.length; i++, j=(j+1)%vertices.length) {
       if ((((points[i].x < point.x) && (point.x <= points[j].x)) ||
            ((points[j].x < point.x) && (point.x <= points[i].x))) &&
           (point.y > points[i].y + (points[j].y-points[i].y)/
@@ -83,7 +81,9 @@ public class Polygon implements Cloneable {
     return crossingNumber%2 == 1;
   }
   
-  public void rotate(int degrees) {rotation = (rotation+degrees)%360;}
+  public void rotate(int degrees) {
+    this.setHeading((this.getHeading()+degrees) % 360);
+  }
   
   /*
   The following methods are private access restricted because, as this access
@@ -94,8 +94,8 @@ public class Polygon implements Cloneable {
   // "findArea" implements some more magic math.
   private double findArea() {
     double sum = 0;
-    for (int i = 0, j = 1; i < shape.length; i++, j=(j+1)%shape.length) {
-      sum += shape[i].x*shape[j].y-shape[j].x*shape[i].y;
+    for (int i = 0, j = 1; i < vertices.length; i++, j=(j+1)%vertices.length) {
+      sum += vertices[i].x*vertices[j].y-vertices[j].x*vertices[i].y;
     }
     return Math.abs(sum/2);
   }
@@ -103,11 +103,11 @@ public class Polygon implements Cloneable {
   // "findCenter" implements another bit of math.
   private Point findCenter() {
     Point sum = new Point(0,0);
-    for (int i = 0, j = 1; i < shape.length; i++, j=(j+1)%shape.length) {
-      sum.x += (shape[i].x + shape[j].x)
-               * (shape[i].x * shape[j].y - shape[j].x * shape[i].y);
-      sum.y += (shape[i].y + shape[j].y)
-               * (shape[i].x * shape[j].y - shape[j].x * shape[i].y);
+    for (int i = 0, j = 1; i < vertices.length; i++, j=(j+1)%vertices.length) {
+      sum.x += (vertices[i].x + vertices[j].x)
+               * (vertices[i].x * vertices[j].y - vertices[j].x * vertices[i].y);
+      sum.y += (vertices[i].y + vertices[j].y)
+               * (vertices[i].x * vertices[j].y - vertices[j].x * vertices[i].y);
     }
     double area = findArea();
     return new Point(Math.abs(sum.x/(6*area)),Math.abs(sum.y/(6*area)));

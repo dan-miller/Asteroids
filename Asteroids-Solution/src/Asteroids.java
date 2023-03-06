@@ -139,16 +139,14 @@ public class Asteroids extends Game {
                 bullet2 = null;
             }
         }
-
-        
         repaint();
     }
 
     public void shoot() {
         if (bullet1 == null) {
-            bullet1 = new Bullet(new Point(ship.position.x, ship.position.y), ship.rotation);
+            bullet1 = new Bullet(new Point(ship.getPosition().x, ship.getPosition().y), ship.getHeading());
         } else if (bullet2 == null) {
-            bullet2 = new Bullet(new Point(ship.position.x, ship.position.y), ship.rotation);
+            bullet2 = new Bullet(new Point(ship.getPosition().x, ship.getPosition().y), ship.getHeading());
         }
     }
 
@@ -193,7 +191,6 @@ public class Asteroids extends Game {
         }
 
         @Override
-        public void keyTyped(KeyEvent e) {
-        }
+        public void keyTyped(KeyEvent e) { }
     }
 }

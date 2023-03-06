@@ -27,35 +27,22 @@ public class Ship extends Polygon implements ActionListener {
         
     }
 
-    public void move() {
-        this.position.x += (this.acceleration * Math.cos(Math.toRadians(this.rotation)));
-        this.position.y += (this.acceleration * Math.sin(Math.toRadians(this.rotation)));
-        if (this.position.x > 800) {
-            this.position.x = 0;
-        }
-        if (this.position.x < 0) {
-            this.position.x = 800;
-        }
-        if (this.position.y > 600) {
-            this.position.y = 0;
-        }
-        if (this.position.y < 0) {
-            this.position.y = 600;
-        }
-    }
-
     public void accelerate() {
         if (this.acceleration < 1) {
             this.acceleration += 0.0001;
         }
     }
 
+    public void move() {
+        super.move(this.acceleration);
+    }
+
     public void rotateLeft() {
-        this.rotation -= 0.25;
+        this.setHeading(this.getHeading() - 0.25);
     }
 
     public void rotateRight() {
-        this.rotation += 0.25;
+        this.setHeading(this.getHeading() + 0.25);
     }
 
     @Override

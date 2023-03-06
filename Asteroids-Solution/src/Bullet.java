@@ -14,24 +14,12 @@ public class Bullet extends Circle {
     }
 
     public boolean move() {
-        if (distanceTraveled > MAX_DISTANCE) {
+        if (distanceTraveled < MAX_DISTANCE) {
+            super.move(BULLET_SPEED);
+            distanceTraveled++;
+            return true;
+        } else {
             return false;
         }
-        this.getPosition().x += (BULLET_SPEED * Math.cos(Math.toRadians(this.getHeading())));
-        this.getPosition().y += (BULLET_SPEED * Math.sin(Math.toRadians(this.getHeading())));
-        if (this.getPosition().x > 800) {
-            this.getPosition().x = 0;
-        }
-        if (this.getPosition().x < 0) {
-            this.getPosition().x = 800;
-        }
-        if (this.getPosition().y > 600) {
-            this.getPosition().y = 0;
-        }
-        if (this.getPosition().y < 0) {
-            this.getPosition().y = 600;
-        }
-        distanceTraveled++;
-        return true;
     }
 }
