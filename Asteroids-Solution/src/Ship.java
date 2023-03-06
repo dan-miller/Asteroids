@@ -46,16 +46,16 @@ public class Ship extends Polygon implements ActionListener {
 
     public void accelerate() {
         if (this.acceleration < 1) {
-            this.acceleration += 0.1;
+            this.acceleration += 0.0001;
         }
     }
 
     public void rotateLeft() {
-        this.rotation -= 5;
+        this.rotation -= 0.25;
     }
 
     public void rotateRight() {
-        this.rotation += 5;
+        this.rotation += 0.25;
     }
 
     @Override

@@ -17,6 +17,9 @@ public class Asteroids extends Game {
     private Bullet bullet2;
     private ArrayList<Asteroid> asteroids;
     private ArrayList<Star> stars;
+    private boolean turningLeft;
+    private boolean turningRight;
+    private boolean accelerating;
 
     public Asteroids() {
         super("Asteroids!", 800, 600);
@@ -78,6 +81,15 @@ public class Asteroids extends Game {
 
         if (this.play) {
             ship.move();
+            if (turningRight) {
+                ship.rotateRight();
+            }
+            if (turningLeft) {
+                ship.rotateLeft();
+            }
+            if (accelerating) {
+                ship.accelerate();
+            }
         }
         ship.paint(brush);
 
@@ -127,6 +139,8 @@ public class Asteroids extends Game {
                 bullet2 = null;
             }
         }
+
+        
         repaint();
     }
 
@@ -143,19 +157,18 @@ public class Asteroids extends Game {
     }
 
     class Keyboard implements KeyListener {
-        public Keyboard() {
-        }
+        public Keyboard() {}
 
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_UP) {
-                ship.accelerate();
+                accelerating = true;
             }
             if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                ship.rotateRight();
+                turningRight = true;
             }
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                ship.rotateLeft();
+                turningLeft = true;
             }
 
             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
@@ -168,6 +181,15 @@ public class Asteroids extends Game {
 
         @Override
         public void keyReleased(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                turningRight = false;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                turningLeft = false;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_UP) {
+                accelerating = false;
+            }
         }
 
         @Override
