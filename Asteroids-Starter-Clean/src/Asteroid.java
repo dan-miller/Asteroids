@@ -21,6 +21,19 @@ public class Asteroid extends Polygon {
     }
 
     public void move() {
-
+        this.getPosition().x += (this.xVelocity * Math.cos(Math.toRadians(this.getHeading())));
+        this.getPosition().y += (this.yVelocity * Math.sin(Math.toRadians(this.getHeading())));
+        if (this.getPosition().x > 800) {
+            this.getPosition().x = 0;
+        }
+        if (this.getPosition().x < 0) {
+            this.getPosition().x = 800;
+        }
+        if (this.getPosition().y > 600) {
+            this.getPosition().y = 0;
+        }
+        if (this.getPosition().y < 0) {
+            this.getPosition().y = 600;
+        }
     }
 }

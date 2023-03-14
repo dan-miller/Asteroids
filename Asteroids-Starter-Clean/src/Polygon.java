@@ -13,9 +13,9 @@ NOTE: You don't need to worry about the "magic math" details.
 */
 
 public class Polygon implements Cloneable {
-    private Point position;
-    private double heading;
-    private Point[] vertices; // An array of points that comprise the vertices of the polygon.
+    private Point position; // The absolute point in space of the center of the polgon
+    private double heading; // Can be thought of as the "rotation." 0 is right/east. Increase rotates clockwise
+    private Point[] vertices; // An array of points that comprise the vertices of the polygon. Drawn relative to the "position"
 
     public Point getPosition() {
         return this.position;

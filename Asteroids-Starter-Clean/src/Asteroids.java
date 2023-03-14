@@ -28,6 +28,7 @@ public class Asteroids extends Game {
         // Don't worry about this...
         this.setFocusable(true);
 
+        // Define the set of points for the ship and draw it in the middle of the canvas
         Point[] shipPoints = { 
             new Point(0, 0), 
             new Point(35, 10), 
@@ -35,6 +36,7 @@ public class Asteroids extends Game {
             new Point(5, 10) 
         };
         ship = new Ship(shipPoints, new Point(300, 300), 0);
+
 
         // This draws each asteroid as a perfect hexagon.
         Point[] asteroidPoints = {
@@ -49,10 +51,17 @@ public class Asteroids extends Game {
         Asteroid[] array = {
             new Asteroid(asteroidPoints, new Point(50, 50), 0),
             new Asteroid(asteroidPoints, new Point(50, 250), 0),
+            // Add more asteroids here
         };
         asteroids = new ArrayList<Asteroid>(Arrays.asList(array));
 
+        // Create two new star objects with random coordinates on the canvas and with random headings
+        // so they can move in random directions.
         stars = new ArrayList<Star>();
+        stars.add(new Star(new Point(Math.random() * 800, Math.random() * 600), Math.random() * 360));
+        stars.add(new Star(new Point(Math.random() * 800, Math.random() * 600), Math.random() * 360));
+
+        this.addKeyListener(new Keyboard());
     }
 
     public void paint(Graphics brush) {
@@ -66,11 +75,66 @@ public class Asteroids extends Game {
         int yPos = mousePos != null ? mousePos.y : -1;
         brush.drawString("X: " + xPos + " Y: " + yPos, 700, 550);
 
+        // Ship /////////////////////////////////////////////////////////////
+        if (this.play) {
+            if (turningRight) {
+                ship.rotateRight();
+            }
+            if (turningLeft) { 
+                ship.rotateLeft();
+            }
+            if (accelerating) {
+                ship.accelerate();
+            }
+            ship.move();
+        }
         ship.paint(brush);
+        // End Ship //////////////////////////////////////////////////////////
+
+        // Stars /////////////////////////////////////////////////////////////
+        if (this.stars != null) {
+            // Milestone 3: Add a for loop to move (only if this.play is true) and paint each star
+        }
+        // End Stars /////////////////////////////////////////////////////////
+
+        // Asteroids /////////////////////////////////////////////////////////
+        if (this.asteroids != null) {
+            // Milestone 5: Add a for loop to move (only if this.play is true) and paint each asteroid
+
+            // Add another for loop (or do it in the same loop above) that will
+            // 1. Check and see if the current asteroid has collided with the ship
+            // 1.2. If so, end the game (see packet for details)
+            // 2. Check and see if the current asteroid "contains" bullet1 or bullet2 (after making sure that the bullet is not null)
+            // 2.1. If so, set the bullet to null so it disappears, and remove the asteroid
+            //      from the asteroids list (remember to adjust the loop variable accordingly)
+        }
+        // End Asteroids /////////////////////////////////////////////////////
+
+        // Bullets ///////////////////////////////////////////////////////////
+        if (bullet1 != null) {
+            bullet1.paint(brush);
+            if (bullet1.move() == false) {
+                bullet1 = null;
+            }
+        }
+        if (bullet2 != null) {
+            bullet2.paint(brush);
+            if (bullet2.move() == false) {
+                bullet2 = null;
+            }
+        }
+        // End Bullets ///////////////////////////////////////////////////////
+        
+        // Redraw the entire Canvas to apply changes made to objects
+        repaint();
     }
 
     private void shoot() {
-
+        if (bullet1 == null) {
+            bullet1 = new Bullet(new Point(ship.getPosition().x, ship.getPosition().y), ship.getHeading());
+        } else if (bullet2 == null) {
+            bullet2 = new Bullet(new Point(ship.getPosition().x, ship.getPosition().y), ship.getHeading());
+        }
     }
 
     public static void main(String[] args) {
@@ -81,37 +145,37 @@ public class Asteroids extends Game {
     class Keyboard implements KeyListener {
 
         @Override
-        public void keyTyped(KeyEvent e) {
-            
-        }
-
-        @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_UP) {
-                accelerating = true;
+
             }
             if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                turningRight = true;
+
             }
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                turningLeft = true;
+
             }
             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                shoot();
+
             }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_UP) {
-                accelerating = false;
+
             }
             if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                turningRight = false;
+
             }
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                turningLeft = false;
+
             }
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            // Do not add any code here.
         }
         
     }

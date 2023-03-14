@@ -1,10 +1,16 @@
 import java.awt.*;
-public class Ship extends Polygon {
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.Timer;
+public class Ship extends Polygon implements ActionListener {
+    Timer timer = new Timer(300, this);
     private double velocity = 0;
 
     public Ship(Point[] _vertices, Point _position, double _heading) {
+        
         super(_vertices, _position, _heading);
+        timer.start();
     }
 
     public void paint(Graphics brush) {
@@ -52,5 +58,16 @@ public class Ship extends Polygon {
 
     public void rotateRight() {
         this.setHeading(this.getHeading() + 0.25);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent ev) {
+        if (ev.getSource() == timer) {
+            if (this.velocity > 0.01) {
+                this.velocity -= 0.01;
+            } else {
+                this.velocity = 0;
+            }
+        }
     }
 }
