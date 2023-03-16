@@ -99,9 +99,9 @@ public class Asteroids extends Game {
 
         // Asteroids /////////////////////////////////////////////////////////
         if (this.asteroids != null) {
-            // Milestone 5: Add a for loop to move (only if this.play is true) and paint each asteroid
+            // Milestone 4: Add a for loop to move (only if this.play is true) and paint each asteroid
 
-            // Add another for loop (or do it in the same loop above) that will
+            // Milestone 5: Add another for loop (or do it in the same loop above) that will
             // 1. Check and see if the current asteroid has collided with the ship
             // 1.2. If so, end the game (see packet for details)
             // 2. Check and see if the current asteroid "contains" bullet1 or bullet2 (after making sure that the bullet is not null)
